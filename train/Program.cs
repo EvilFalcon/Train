@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace train
-{
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
+namespace train {
+    internal class Program {
+        static void Main(string[] args) {
         }
+    }
+
+    class Train 
+    {
+
+
+    }
+
+    class wagon 
+    {
+
     }
 }
