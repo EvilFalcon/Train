@@ -28,6 +28,6 @@ namespace Train
 
     class ticket
     {
-        CurrencyWrapper 
+ 
     }
 }
