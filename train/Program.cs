@@ -9,67 +9,44 @@ namespace Train
             TrainCreator creator = new TrainCreator();
             Train train = creator.GetNewTrain();
             Console.WriteLine(new string('-', 40));
-            train.ShowInfo();
-            int step = 1;
-            while(true)
+
+            const string CommandSetDeparturePoint = "1";
+            const string CommandSetPointOfArrival = "2";
+
+            bool isWork = true;
+
+            while(isWork)
             {
-                    Console.WriteLine($"step на входе {step}");
-                switch(step)
+                train.ShowInfo();
+
+                switch(Console.ReadLine())
                 {
-                    case 1:
-                    step++;
+                    case CommandSetDeparturePoint:
+
                     break;
 
-                    case 2:
-                    //Console.WriteLine($"step на входе {step}");
-                    step++;
-                   // Console.WriteLine($"на выходе {step}");
+                    case CommandSetPointOfArrival:
+
                     break;
-
-                    case 3:
-                   // Console.WriteLine($"step на входе {step}");
-                    step++;
-                   // Console.WriteLine($"на выходе {step}");
-                    break;
-
-                    case 4:
-                        step=1;
-                    break;
-
-
-
                 }
-                    Console.WriteLine($"на выходе {step}");
-                Console.ReadKey();
             }
-
-
-
-
         }
     }
 
-    //class Logger
-    //{
-
-    //}
-
-    //class Dispatcher
-    //{
-
-    //}
 
     class TrainCreator
     {
-        int _oneWagonSeats = 24;
+
 
         public Train GetNewTrain()
         {
             Direction direction = GetDirection();
+            Wagon wagons = null;
+
             int tickets = SoldTickets();
             Console.WriteLine($"количество проданных билетов {tickets}");
-            int wagons = CreateWagons(tickets);
-            int freePlaces = GetFreePlaces(wagons, tickets);
+            wagons = CreateWagons(tickets, wagons.OneWagonSeats);
+            int freePlaces = GetFreePlaces(wagons.WagonCount, tickets, wagons.OneWagonSeats);
             // Train train = new Train(direction, wagons, freePlaces);
             Train train = new Train(direction, wagons, freePlaces);
             return train;
@@ -98,22 +75,22 @@ namespace Train
             return random.Next(120, 250);
         }
 
-        private int CreateWagons(int tickets)
+        private Wagon CreateWagons(int tickets, int OneWagonSeats)
         {
-            int wagonsCount = tickets / _oneWagonSeats;
+            int wagonsCount = tickets / OneWagonSeats;
 
-            if(tickets % _oneWagonSeats != 0)
+            if(tickets % OneWagonSeats != 0)
             {
                 wagonsCount++;
 
             }
 
-            return wagonsCount;
+            return new Wagon(wagonsCount);
         }
 
-        private int GetFreePlaces(int wagons, int tickets)
+        private int GetFreePlaces(int wagons, int tickets, int oneWagonSeats)
         {
-            return (wagons * _oneWagonSeats) - tickets;
+            return (wagons * oneWagonSeats) - tickets;
         }
     }
 
@@ -124,18 +101,18 @@ namespace Train
 
     class Train
     {
-        private int _wagonsCount;
+        private Wagon _wagonsCount;
         private int _freePlaces;
         private Direction _direction;
 
-        public Train(string direction, int wagonsCount, int freePlaces)
+        public Train(string direction, Wagon wagonsCount, int freePlaces)
         {
             // _direction = direction;
             _wagonsCount = wagonsCount;
             _freePlaces = freePlaces;
         }
 
-        public Train(Direction direction, int wagonsCount, int freePlaces)
+        public Train(Direction direction, Wagon wagonsCount, int freePlaces)
         {
             _direction = direction;
             _wagonsCount = wagonsCount;
@@ -151,7 +128,7 @@ namespace Train
         {
             Console.Write("|поезд ");
             _direction.Show();
-            Console.WriteLine($"| количество вагонов {_wagonsCount}| свободных мест {_freePlaces}|");
+            Console.WriteLine($"| количество вагонов {_wagonsCount.WagonCount}| свободных мест {_freePlaces}|");
 
         }
     }
@@ -179,9 +156,15 @@ namespace Train
 
     class Wagon
     {
-        int _oneWagonSeats = 24;
+        private int _wagonCount;
 
-        public  int OneWagonSeats =>  _oneWagonSeats;
+        public Wagon(int wagonCount)
+        {
+            _wagonCount = wagonCount;
+        }
+
+        public int WagonCount => _wagonCount;
+        public int OneWagonSeats => 24;
     }
 
     //class WaitingRoom
