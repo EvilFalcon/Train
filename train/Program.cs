@@ -27,13 +27,14 @@ namespace Train
 
         public void ShowInfo()
         {
+            const int positionTop = 24;
 
             if(_trains.Count > 0)
             {
-                Console.SetCursorPosition(0, 24);
-                
+                Console.SetCursorPosition(0, positionTop);
+
                 Console.WriteLine("Поезда на линии");
-                
+
                 foreach(Train train in _trains)
                 {
                     train.ShowInfo();
@@ -52,8 +53,6 @@ namespace Train
         private int _freePlaces = 0;
         private int _wagons = 0;
 
-
-
         public void Work(DataBase trainData)
         {
             int nextStep = 0;
@@ -61,9 +60,9 @@ namespace Train
 
             while(isNewTrain)
             {
-                if(nextStep>0)
-                trainData.ShowInfo();
-                
+                if(nextStep > 0)
+                    trainData.ShowInfo();
+
                 ShowRealTimeInfo();
 
                 switch(nextStep)
@@ -92,19 +91,18 @@ namespace Train
                     Train train = new Train(_direction, _wagons, _freePlaces);
                     trainData.Add(train);
                     nextStep++;
-                        Console.WriteLine("Нажмите любую клавишу для запуска поезда");
-                        break;
+                    Console.WriteLine("Нажмите любую клавишу для запуска поезда");
+                    break;
 
                     case 4:
                     isNewTrain = IsContinue();
                     nextStep = 0;
-                        Console.WriteLine("Нажмите любую клавишу для продолжения ");
-                        break;
+                    Console.WriteLine("Нажмите любую клавишу для продолжения ");
+                    break;
                 }
 
                 Console.ReadKey();
                 Console.Clear();
-
             }
         }
 
@@ -169,6 +167,7 @@ namespace Train
                     isCorrectInput = true;
                 }
             }
+
             return new Direction(departurePoint, arrivalPoint);
         }
 
@@ -181,15 +180,15 @@ namespace Train
 
         private void ShowSellingTickets(int tickets)
         {
+            const int millisecondsTimeout = 40;
             Console.CursorVisible = false;
             Console.Clear();
 
             for(int i = 0; i <= tickets; i++)
             {
                 Console.SetCursorPosition(0, 0);
-
                 Console.WriteLine($"проданных билетов : {i}");
-                Thread.Sleep(40);
+                Thread.Sleep(millisecondsTimeout);
             }
 
             Console.CursorVisible = true;
