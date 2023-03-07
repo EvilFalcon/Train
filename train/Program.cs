@@ -47,13 +47,14 @@ namespace Train
 
     class TrainCreator
     {
+        public const int SeatsOneWagon = 24;
+        
         private Direction _direction = new Direction("не", "задано");
         private int _tickets = 0;
         private int _freePlaces = 0;
         private int _wagons = 0;
         private string _stat="Не отправлен на маршрут";
         
-        public int SeatsOneWagon => 24;
         
         public void Work(DataBase trainData)
         {
