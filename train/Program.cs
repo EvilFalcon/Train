@@ -48,11 +48,13 @@ namespace Train
     class TrainCreator
     {
         private Direction _direction = new Direction("не", "задано");
-        private Wagon _wagon = new Wagon();
         private int _tickets = 0;
         private int _freePlaces = 0;
         private int _wagons = 0;
-
+        private string _stat="Не отправлен на маршрут";
+        
+        public int SeatsOneWagon => 24;
+        
         public void Work(DataBase trainData)
         {
             int nextStep = 0;
@@ -81,8 +83,8 @@ namespace Train
 
                     case 2:
                     ShowSellingTickets(_tickets);
-                    _wagons = CreateWagons(_tickets, _wagon.Seats);
-                    _freePlaces = GetFreePlaces(_wagons, _tickets, _wagon.Seats);
+                    _wagons = CreateWagons(_tickets, SeatsOneWagon);
+                    _freePlaces = GetFreePlaces(_wagons, _tickets, SeatsOneWagon);
                     nextStep++;
                     Console.WriteLine("Нажмите любую клавишу для создания вагонов");
                     break;
@@ -90,6 +92,7 @@ namespace Train
                     case 3:
                     Train train = new Train(_direction, _wagons, _freePlaces);
                     trainData.Add(train);
+                    _stat = "На маршруте";
                     nextStep++;
                     Console.WriteLine("Нажмите любую клавишу для запуска поезда");
                     break;
@@ -106,7 +109,7 @@ namespace Train
             }
         }
 
-        public Direction GetDirection()
+        private Direction GetDirection()
         {
             string[] directions =
             {
@@ -209,6 +212,7 @@ namespace Train
                 _freePlaces = 0;
                 _wagons = 0;
                 _direction = newDirection;
+                _stat = "Не отправлен на маршрут";
                 return true;
             }
         }
@@ -221,6 +225,7 @@ namespace Train
             Console.WriteLine($"\nПроданных билетов : {_tickets}");
             Console.WriteLine($"Вагонов : {_wagons}");
             Console.WriteLine($"Свободных мест в поезде : {_freePlaces}");
+            Console.WriteLine($"Статус поезда : {_stat}");
             Console.WriteLine(new string('-', 30));
         }
 
@@ -230,11 +235,11 @@ namespace Train
             return random.Next(120, 250);
         }
 
-        private int CreateWagons(int tickets, int OneWagonSeats)
+        private int CreateWagons(int tickets, int oneWagonSeats)
         {
-            int wagonsCount = tickets / OneWagonSeats;
+            int wagonsCount = tickets / oneWagonSeats;
 
-            if(tickets % OneWagonSeats != 0)
+            if(tickets % oneWagonSeats != 0)
             {
                 wagonsCount++;
             }
@@ -284,11 +289,5 @@ namespace Train
         {
             Console.Write($"{_departure} - {_arrival} ");
         }
-    }
-
-    class Wagon
-    {
-        public string Type => "бизнес";
-        public int Seats => 24;
     }
 }
