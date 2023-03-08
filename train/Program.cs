@@ -55,7 +55,7 @@ namespace Train
         private int _wagons = 0;
         private string _stat="Не отправлен на маршрут";
         
-        
+
         public void Work(DataBase trainData)
         {
             int nextStep = 0;
