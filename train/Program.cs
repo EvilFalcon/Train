@@ -55,57 +55,26 @@ namespace Train
         private int _wagons = 0;
         private string _stat="Не отправлен на маршрут";
         
-
         public void Work(DataBase trainData)
         {
-            int nextStep = 0;
             bool isNewTrain = true;
 
             while(isNewTrain)
             {
-                if(nextStep > 0)
-                    trainData.ShowInfo();
-
                 ShowRealTimeInfo();
-
-                switch(nextStep)
-                {
-                    case 0:
-                    _direction = GetDirection();
-                    nextStep++;
-                    Console.WriteLine("Нажмите любую клавишу для продолжения ");
-                    break;
-
-                    case 1:
-                    _tickets = SoldTickets();
-                    nextStep++;
-                    Console.WriteLine("Нажмите любую клавишу для продажи билетов ");
-                    break;
-
-                    case 2:
-                    ShowSellingTickets(_tickets);
-                    _wagons = CreateWagons(_tickets, SeatsOneWagon);
-                    _freePlaces = GetFreePlaces(_wagons, _tickets, SeatsOneWagon);
-                    nextStep++;
-                    Console.WriteLine("Нажмите любую клавишу для создания вагонов");
-                    break;
-
-                    case 3:
-                    Train train = new Train(_direction, _wagons, _freePlaces);
-                    trainData.Add(train);
-                    _stat = "На маршруте";
-                    nextStep++;
-                    Console.WriteLine("Нажмите любую клавишу для запуска поезда");
-                    break;
-
-                    case 4:
-                    isNewTrain = IsContinue();
-                    nextStep = 0;
-                    Console.WriteLine("Нажмите любую клавишу для продолжения ");
-                    break;
-                }
-
-                Console.ReadKey();
+                _direction = GetDirection();
+                ShowRealTimeInfo();
+                _tickets = SoldTickets();
+                ShowRealTimeInfo();
+                ShowSellingTickets(_tickets);
+                _wagons = CreateWagons(_tickets, SeatsOneWagon);
+                _freePlaces = GetFreePlaces(_wagons, _tickets, SeatsOneWagon);
+                _stat = "Отправлен на маршрут";
+                ShowRealTimeInfo();
+                Train train = new Train(_direction, _wagons, _freePlaces);
+                trainData.Add(train);
+                trainData.ShowInfo();
+                isNewTrain = IsContinue();
                 Console.Clear();
             }
         }
@@ -184,7 +153,7 @@ namespace Train
 
         private void ShowSellingTickets(int tickets)
         {
-            const int millisecondsTimeout = 40;
+            const int millisecondsTimeout = 1;
             Console.CursorVisible = false;
             Console.Clear();
 
@@ -203,10 +172,12 @@ namespace Train
             const string CommandСonfirm = "yes";
             const string CommanfDoNotСonfirm = "no";
             Direction newDirection = new Direction("не", "задано");
-            Console.WriteLine($"продолжить работу {CommandСonfirm}/{CommanfDoNotСonfirm}");
+            Console.Write($"продолжить работу {CommandСonfirm}/{CommanfDoNotСonfirm} :");
 
-            if(Console.ReadLine() == CommanfDoNotСonfirm)
+            if (Console.ReadLine() == CommanfDoNotСonfirm)
+            {
                 return false;
+            }
             else
             {
                 _tickets = 0;
